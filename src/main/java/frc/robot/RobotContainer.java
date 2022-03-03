@@ -21,50 +21,88 @@ public class RobotContainer {
   private final FeederSubsystem feeder = new FeederSubsystem();
   private final ArmSubsystem arm = new ArmSubsystem();
   private final IntakeSubsystem intake = new IntakeSubsystem(arm);
-  private final LimelightSubsystem limelight = new LimelightSubsystem(driveTrain);
   private final XboxController xboxController = new XboxController(OIConstants.kXboxControllerPort);
 
-  // private final Command autoCommand = new RunCommand(() -> driveTrain.drive(0.5, 0.5), driveTrain).withTimeout(3);
   private Command autoCommand;
-  /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the button bindings
     configureButtonBindings();
     driveTrain.setDefaultCommand(
       new RunCommand(() ->
-        driveTrain.arcadeDrive(xboxController.getRightX(), -xboxController.getRightY())
+        driveTrain.arcadeDrive(-xboxController.getRightY(), xboxController.getRightX())
       , driveTrain
     ));
+  
     intake.setDefaultCommand(
       new RunCommand(() ->
         intake.set(xboxController.getRightTriggerAxis(), xboxController.getLeftTriggerAxis())
       , intake
     ));
-    //limelight.setDefaultCommand(
-    //  new RunCommand(() ->
-    //  limelight.execute(), limelight)
-    //);
   }
   
   private void configureButtonBindings() {
-
     // Arm
-    new POVButton(xboxController, 0).whenPressed(() -> intake.up());
-    new POVButton(xboxController, 180).whileHeld(new StartEndCommand(intake::down, intake::idle, intake));
+    new POVButton(xboxController, 0)
+    .whenPressed(
+      () -> intake.up()
+    );
+
+    new POVButton(xboxController, 180)
+    .whileHeld(
+      new StartEndCommand(
+        intake::down,
+        intake::idle,
+        intake
+    ));
+
 
     // Feeder
-    new JoystickButton(xboxController, Button.kRightBumper.value).whileHeld(new StartEndCommand(feeder::in, feeder::stop, feeder));
-    new JoystickButton(xboxController, Button.kLeftBumper.value).whileHeld(new StartEndCommand(feeder::out, feeder::stop, feeder));
+    new JoystickButton(xboxController, Button.kRightBumper.value)
+    .whileHeld(
+      new StartEndCommand(
+        feeder::in,
+        feeder::stop,
+        feeder
+    ));
+
+    new JoystickButton(xboxController, Button.kLeftBumper.value)
+    .whileHeld(
+      new StartEndCommand(
+        feeder::out,
+        feeder::stop,
+        feeder
+    ));
+
 
     // Shooter
-    new JoystickButton(xboxController, Button.kY.value).toggleWhenPressed(new StartEndCommand(shooter::shoot, shooter::stop, shooter));
+    new JoystickButton(xboxController, Button.kY.value)
+    .toggleWhenPressed(
+      new StartEndCommand(
+        shooter::shoot,
+        shooter::stop,
+        shooter
+    ));
+
 
     // DriveTrain
-    new JoystickButton(xboxController, Button.kX.value).whenPressed(() -> driveTrain.antiFall());
-    new JoystickButton(xboxController, Button.kRightStick.value).whenPressed(() -> driveTrain.speedChange());
+    new JoystickButton(xboxController, Button.kX.value)
+    .whenPressed(
+      () -> driveTrain.antiFall()
+    );
 
-    // Limelight
-    new JoystickButton(xboxController, Button.kA.value).whileHeld(new RunCommand(limelight::run, limelight));
+    new JoystickButton(xboxController, Button.kLeftStick.value)
+    .whenPressed(
+      () -> driveTrain.speedChange()
+    );
+
+    new POVButton(xboxController, 90)
+    .whenPressed(
+      () -> driveTrain.autoAim(true)
+    )
+    .whenReleased(
+      () ->
+      driveTrain.autoAim(false)
+    );
   }
 
   public Command getAutonomousCommand() {

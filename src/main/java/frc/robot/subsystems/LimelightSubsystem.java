@@ -7,10 +7,6 @@ public class LimelightSubsystem extends SubsystemBase{
 
   private boolean LimelightHasValidTarget = false;
   private double LimelightSteerCommand = 0.0;
-  private final DriveSubsystem driveTrain;
-  public LimelightSubsystem(DriveSubsystem driveTrain){
-    this.driveTrain = driveTrain;
-  }
 
   public void Update_Limelight_Tracking() {
     // These numbers must be turned for your Robot!  Be careful!
@@ -22,7 +18,7 @@ public class LimelightSubsystem extends SubsystemBase{
     double tv = NetworkTableInstance.getDefault().getTable("limelight").getEntry("tv").getDouble(0);
     double tx = NetworkTableInstance.getDefault().getTable("limelight").getEntry("tx").getDouble(0);
     double ta = NetworkTableInstance.getDefault().getTable("limelight").getEntry("ta").getDouble(0);
-    System.out.println(tv);
+
     if (tv < 1.0)
     {
       LimelightHasValidTarget = false;
@@ -44,12 +40,5 @@ public class LimelightSubsystem extends SubsystemBase{
     {
       drive_cmd = MAX_DRIVE;
     }
-  }
-
-  public void run() {
-      Update_Limelight_Tracking();
-      if (LimelightHasValidTarget) {
-        driveTrain.tankDrive(-LimelightSteerCommand, LimelightSteerCommand);
-      }
   }
 }
