@@ -6,13 +6,15 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.subsystems.*;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.XboxController.Button;
 import frc.robot.Constants.*;
-
 
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
@@ -23,7 +25,14 @@ public class RobotContainer {
   private final IntakeSubsystem intake = new IntakeSubsystem(arm);
   private final XboxController xboxController = new XboxController(OIConstants.kXboxControllerPort);
 
-  private Command autoCommand;
+
+  private Command autoCommand = new ParallelCommandGroup(
+    new InstantCommand(() -> driveTrain.moveBackward(0.3)),
+    new StartEndCommand(shooter::shoot, shooter::stop, shooter).withTimeout(5),
+    new WaitCommand(2).andThen(new StartEndCommand(feeder::in, feeder::stop, feeder)).withTimeout(5),
+    new WaitCommand(3).andThen(new InstantCommand(() -> driveTrain.moveBackward(1.7))));
+
+
   public RobotContainer() {
     // Configure the button bindings
     configureButtonBindings();
@@ -95,13 +104,17 @@ public class RobotContainer {
       () -> driveTrain.speedChange()
     );
 
+    new JoystickButton(xboxController, Button.kA.value)
+    .whenPressed(
+      () -> driveTrain.maxSpeed()
+    );
+
     new POVButton(xboxController, 90)
     .whenPressed(
       () -> driveTrain.autoAim(true)
     )
     .whenReleased(
-      () ->
-      driveTrain.autoAim(false)
+      () -> driveTrain.autoAim(false)
     );
   }
 
