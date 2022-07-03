@@ -1,0 +1,70 @@
+{
+  "HALProvider": {
+    "Other Devices": {
+      "SPARK MAX [31]": {
+        "header": {
+          "open": true
+        }
+      },
+      "SPARK MAX [33]": {
+        "header": {
+          "open": true
+        }
+      },
+      "SPARK MAX [34]": {
+        "header": {
+          "open": true
+        }
+      },
+      "SPARK MAX [36]": {
+        "header": {
+          "open": true
+        }
+      },
+      "SPARK MAX [41]": {
+        "header": {
+          "open": true
+        }
+      }
+    }
+  },
+  "NTProvider": {
+    "types": {
+      "/FMSInfo": "FMSInfo",
+      "/LiveWindow/ArmSubsystem": "Subsystem",
+      "/LiveWindow/DriveSubsystem": "Subsystem",
+      "/LiveWindow/FeederSubsystem": "Subsystem",
+      "/LiveWindow/IntakeSubsystem": "Subsystem",
+      "/LiveWindow/ShooterSubsystem": "Subsystem",
+      "/LiveWindow/Ungrouped/DifferentialDrive[1]": "DifferentialDrive",
+      "/LiveWindow/Ungrouped/Scheduler": "Scheduler"
+    },
+    "windows": {
+      "/LiveWindow/DriveSubsystem": {
+        "window": {
+          "visible": true
+        }
+      },
+      "/LiveWindow/FeederSubsystem": {
+        "window": {
+          "visible": true
+        }
+      },
+      "/LiveWindow/ShooterSubsystem": {
+        "window": {
+          "visible": true
+        }
+      },
+      "/LiveWindow/Ungrouped/DifferentialDrive[1]": {
+        "window": {
+          "visible": true
+        }
+      },
+      "/LiveWindow/Ungrouped/Scheduler": {
+        "window": {
+          "visible": true
+        }
+      }
+    }
+  }
+}

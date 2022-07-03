@@ -14,6 +14,11 @@ public class SparkMax implements MotorController{
         speedController.restoreFactoryDefaults();
     }
 
+    public SparkMax(int port) {
+        speedController = new CANSparkMax(port, MotorType.kBrushless);
+        speedController.restoreFactoryDefaults();
+    }
+
     public void set(double speed) {
         speedController.set(speed);
     }

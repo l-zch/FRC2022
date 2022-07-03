@@ -9,10 +9,11 @@ import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import static frc.robot.Constants.SolenoidPort.*;
-
-import frc.robot.components.SparkMax;
+import static frc.robot.Constants.MotorSpeed.*;
 
 import static frc.robot.Constants.MotorPort.*;
+
+import frc.robot.components.SparkMax;
 
 public class DriveSubsystem extends SubsystemBase {
 
@@ -37,7 +38,7 @@ public class DriveSubsystem extends SubsystemBase {
   }
   
   private void initialize() {
-    drive.setMaxOutput(0.5);
+    drive.setMaxOutput(driveSpeed.value);
     drive.setDeadband(0.05);
     solenoid.set(Value.kForward);
   }
@@ -55,13 +56,29 @@ public class DriveSubsystem extends SubsystemBase {
       drive.arcadeDrive(zRotation, xSpeed);
   }
 
+  public void moveBackward(double second) {
+    double start = System.nanoTime();
+    while(System.nanoTime() - start <  second * Math.pow(10,9)){
+      drive.arcadeDrive(getRotation(), -0.7);
+    }
+  }
+
+  public void stop() {
+    drive.stopMotor();
+    solenoid.set(Value.kForward);
+  }
+  
   public void antiFall() {
     solenoid.toggle();
   }
   
+  public void maxSpeed() {
+    drive.setMaxOutput(1);
+  }
+
   public void speedChange() {
     if (speedDown){
-      drive.setMaxOutput(0.5);
+      drive.setMaxOutput(driveSpeed.value);
       speedDown = false;
     }
     else{

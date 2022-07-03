@@ -68,7 +68,7 @@ public final class Constants {
 
     hang      (-0.9),
 
-    driveSpeed (0.5);
+    driveSpeed (0.6);
 
     public final double value, rev;
     MotorSpeed(double value) {
